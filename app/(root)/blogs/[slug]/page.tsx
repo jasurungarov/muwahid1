@@ -1,12 +1,9 @@
-'use client'
-
 import { Button } from "@/components/ui/button"
 import { ArrowUpRight, CalendarDays, Clock, Facebook, Link2, Linkedin, Minus, Send, Twitter } from "lucide-react"
 import Image from "next/image"
 import parse from 'html-react-parser'
-import { content } from "@/constants"
+import { blogs, content } from "@/constants"
 import Link from "next/link"
-// Removed invalid import of PageProps
 
 interface SlugPageProps {
   params: {
@@ -15,22 +12,28 @@ interface SlugPageProps {
 }
 
 export default function SlugPage({ params }: SlugPageProps) {
+  const blog = blogs.find(b => b.slug === params.slug)
+
+  if (!blog) {
+    return <p className="text-center mt-20 text-xl">Blog topilmadi</p>
+  }
+
   return (
     <div className="pt-[15vh] max-w-5xl mx-auto">
       <h1 className="lg:text-6xl md:text-5xl text-4xl font-creteRound">
-        The AGI hype train is running out of steam
+        {blog.title}
       </h1>
 
       <div className="flex items-center flex-wrap max-md:justify-center gap-4 mt-4">
         <div className="flex items-center gap-2">
           <Image
-            src={'/author/j.jpg'}
-            alt="author"
+            src={blog.images}
+            alt={blog.author}
             width={30}
             height={30}
             className="object-cover rounded-sm"
           />
-          <p>by Jasur</p>
+          <p>by {blog.author}</p>
         </div>
         <Minus/>
         <div className="flex items-center gap-2">
@@ -39,13 +42,13 @@ export default function SlugPage({ params }: SlugPageProps) {
         </div>
         <div className="flex items-center gap-2">
           <CalendarDays className="w-5 h-5"/>
-          <p>Dec 5, 2022</p>
+          <p>{blog.date}</p>
         </div>
       </div>
 
       <Image
-        src={'/blogs/04.jpg'}
-        alt="alt"
+        src={blog.image}
+        alt={blog.title}
         width={1120}
         height={595}
         className="mt-4 rounded-md"
@@ -69,16 +72,16 @@ export default function SlugPage({ params }: SlugPageProps) {
 
       <div className="flex mt-6 gap-6 items-center max-md:flex-col">
         <Image
-          src={'/author/j.jpg'}
-          alt="author"
+          src={blog.images}
+          alt={blog.author}
           width={155}
           height={155}
           className="rounded-md max-md:self-start"
         />
         <div className="flex-1 flex flex-col space-y-4">
-          <h2 className="text-3xl font-creteRound">Jasur Ungarov</h2>
+          <h2 className="text-3xl font-creteRound">{blog.author}</h2>
           <p className="line-clamp-2 text-muted-foreground">
-            Jasur Ungarov is a writer based in New York City. Hi is interested in all things tech, science, and likes to yo-yo in
+            Author bio can go here.
           </p>
           <Link
             href={'/'}

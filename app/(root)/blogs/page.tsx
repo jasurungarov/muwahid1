@@ -1,28 +1,95 @@
-import BlogCard from "@/components/cards/blog"
-import { blogs } from "@/constants"
-import { Dot, Home } from "lucide-react"
+import Image from "next/image"
+import parse from 'html-react-parser'
+import { blogs, content } from "@/constants"
 import Link from "next/link"
+import { ArrowUpRight, Clock, CalendarDays, Facebook, Twitter, Linkedin, Send, Link2 } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Minus } from "lucide-react"
 
-export default function BlogsPage() {
+interface SlugPageProps {
+  params: {
+    slug: string
+  }
+}
+
+export default function SlugPage({ params }: SlugPageProps) {
+  const blog = blogs.find(b => b.slug === params.slug)
+
+  if (!blog) return <p className="text-center mt-20 text-xl">Blog topilmadi</p>
+
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="relative min-h-[40vh] flex items-center justify-center flex-col">
-        <h2 className="text-center text-4xl section-title font-creteRound">
-          <span>Blogs</span>
-        </h2>
+    <div className="pt-[15vh] max-w-5xl mx-auto">
+      <h1 className="lg:text-6xl md:text-5xl text-4xl font-creteRound">
+        {blog.title}
+      </h1>
 
-        <div className="flex gap-1 items-center mt-4">
-          <Home className="w-4 h-4" />
-          <Link href="/" className="opacity-90 hover:underline hover:opacity-100">Home</Link>
-          <Dot />
-          <p className="text-muted-foreground">Blogs</p>
+      <div className="flex items-center flex-wrap max-md:justify-center gap-4 mt-4">
+        <div className="flex items-center gap-2">
+          <Image
+            src={blog.images}
+            alt={blog.author}
+            width={30}
+            height={30}
+            className="object-cover rounded-sm"
+          />
+          <p>by {blog.author}</p>
+        </div>
+        <Minus/>
+        <div className="flex items-center gap-2">
+          <Clock className="w-5 h-5"/>
+          <p>01 min read</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <CalendarDays className="w-5 h-5"/>
+          <p>{blog.date}</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 max-md:grid-cols-1 gap-x-4 gap-y-24 mt-24">
-        {blogs.map(blog => (
-          <BlogCard key={blog.title} {...blog} isVertical />
-        ))}
+      <Image
+        src={blog.image}
+        alt={blog.title}
+        width={1120}
+        height={595}
+        className="mt-4 rounded-md"
+      />
+
+      <div className="flex md:gap-12 max-md:flex-col-reverse mt-12 relative">
+        <div className="flex flex-col space-y-3">
+          <div className="sticky top-36">
+            <p className="text-lg uppercase to-muted-foreground">Share</p>
+            <div className="flex flex-col max-md:flex-row md:space-y-3 max-md:space-x-3 mt-4">
+              <Button size={'icon'} variant={'outline'}><Twitter/></Button>
+              <Button size={'icon'} variant={'outline'}><Facebook/></Button>
+              <Button size={'icon'} variant={'outline'}><Linkedin/></Button>
+              <Button size={'icon'} variant={'outline'}><Send/></Button>
+              <Button size={'icon'} variant={'outline'}><Link2/></Button>
+            </div>
+          </div>
+        </div>
+        <div className="flex-1 prose dark:prose-invert">{parse(content)}</div>
+      </div>
+
+      <div className="flex mt-6 gap-6 items-center max-md:flex-col">
+        <Image
+          src={blog.images}
+          alt={blog.author}
+          width={155}
+          height={155}
+          className="rounded-md max-md:self-start"
+        />
+        <div className="flex-1 flex flex-col space-y-4">
+          <h2 className="text-3xl font-creteRound">{blog.author}</h2>
+          <p className="line-clamp-2 text-muted-foreground">
+            Author bio can go here.
+          </p>
+          <Link
+            href={'/'}
+            className="flex items-center gap-2 hover:text-blue-500 underline transition-colors"
+          >
+            <span>See all posts by this author</span>
+            <ArrowUpRight/>
+          </Link>
+        </div>
       </div>
     </div>
   )
