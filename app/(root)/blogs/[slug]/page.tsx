@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button"
 import {
   ArrowUpRight,
@@ -16,11 +15,8 @@ import parse from "html-react-parser"
 import { content, blogs } from "@/constants"
 import Link from "next/link"
 
-interface SlugPageProps {
-  params: { slug: string }
-}
-
-export default function SlugPage({ params }: SlugPageProps) {
+// params ni hech qanday type constraint bilan o‘rab qo‘ymaymiz
+export default function SlugPage({ params }: { params: { slug: string } }) {
   const blog = blogs.find((b) => b.slug === params.slug)
 
   if (!blog) {
