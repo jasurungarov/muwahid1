@@ -16,11 +16,11 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
-interface PageProps {
+export default function SlugPage({
+  params,
+}: {
   params: { slug: string }
-}
-
-export default function SlugPage({ params }: PageProps) {
+}) {
   const blog = blogs.find((b) => b.slug === params.slug)
 
   if (!blog) {
