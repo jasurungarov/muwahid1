@@ -1,4 +1,8 @@
-import { Button } from "@/components/ui/button"
+import { notFound } from "next/navigation"
+import { blogs, content } from "@/constants"
+import Image from "next/image"
+import Link from "next/link"
+import parse from "html-react-parser"
 import {
   ArrowUpRight,
   CalendarDays,
@@ -10,36 +14,30 @@ import {
   Send,
   Twitter,
 } from "lucide-react"
-import Image from "next/image"
-import parse from "html-react-parser"
-import { content, blogs } from "@/constants"
-import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
-// params ni hech qanday type constraint bilan o‘rab qo‘ymaymiz
-export default function SlugPage({ params }: { params: { slug: string } }) {
+interface PageProps {
+  params: { slug: string }
+}
+
+export default function SlugPage({ params }: PageProps) {
   const blog = blogs.find((b) => b.slug === params.slug)
 
   if (!blog) {
-    return (
-      <div className="pt-[15vh] max-w-5xl mx-auto">
-        <h1 className="text-3xl font-bold">Blog not found</h1>
-      </div>
-    )
+    return notFound()
   }
 
   return (
     <div className="pt-[15vh] max-w-5xl mx-auto">
-      {/* Title */}
       <h1 className="lg:text-6xl md:text-5xl text-4xl font-creteRound">
         {blog.title}
       </h1>
 
-      {/* Meta info */}
       <div className="flex items-center flex-wrap max-md:justify-center gap-4 mt-4">
         <div className="flex items-center gap-2">
           <Image
-            src={blog.images || "/author/j.jpg"}
-            alt="author"
+            src={blog.images}
+            alt={blog.author}
             width={30}
             height={30}
             className="object-cover rounded-sm"
@@ -57,7 +55,6 @@ export default function SlugPage({ params }: { params: { slug: string } }) {
         </div>
       </div>
 
-      {/* Blog image */}
       <Image
         src={blog.image}
         alt={blog.title}
@@ -66,7 +63,6 @@ export default function SlugPage({ params }: { params: { slug: string } }) {
         className="mt-4 rounded-md"
       />
 
-      {/* Content & Share */}
       <div className="flex md:gap-12 max-md:flex-col-reverse mt-12 relative">
         <div className="flex flex-col space-y-3">
           <div className="sticky top-36">
@@ -80,15 +76,12 @@ export default function SlugPage({ params }: { params: { slug: string } }) {
             </div>
           </div>
         </div>
-        <div className="flex-1 prose dark:prose-invert">
-          {parse(content)}
-        </div>
+        <div className="flex-1 prose dark:prose-invert">{parse(content)}</div>
       </div>
 
-      {/* Author */}
       <div className="flex mt-6 gap-6 items-center max-md:flex-col">
         <Image
-          src={blog.images || "/author/j.jpg"}
+          src={blog.images}
           alt={blog.author}
           width={155}
           height={155}
@@ -97,7 +90,8 @@ export default function SlugPage({ params }: { params: { slug: string } }) {
         <div className="flex-1 flex flex-col space-y-4">
           <h2 className="text-3xl font-creteRound">{blog.author}</h2>
           <p className="line-clamp-2 text-muted-foreground">
-            {blog.author} is a writer who shares thoughts on tech and science.
+            {blog.author} is a writer based in New York City. Interested in tech,
+            science, and more.
           </p>
           <Link
             href="/blogs"
