@@ -16,16 +16,10 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
-export default function SlugPage({
-  params,
-}: {
-  params: { slug: string }
-}) {
+export default function SlugPage({ params }: { params: { slug: string } }) {
   const blog = blogs.find((b) => b.slug === params.slug)
 
-  if (!blog) {
-    return notFound()
-  }
+  if (!blog) return notFound()
 
   return (
     <div className="pt-[15vh] max-w-5xl mx-auto">
